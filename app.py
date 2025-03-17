@@ -29,6 +29,13 @@ from transformers import pipeline  # For CheXagent model
 import re
 from collections import Counter
 
+# Set the page configuration (the little snake will appear on the tab)
+st.set_page_config(
+    page_title="Gender Bias in Radiology",
+    page_icon="🐍",  # This displays the snake emoji as the favicon
+    layout="wide"
+)
+
 # ========== THEME & STYLE FUNCTIONS ==========
 if "theme" not in st.session_state:
     st.session_state.theme = "light"
