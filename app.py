@@ -183,6 +183,8 @@ def upload_data_page():
     if uploaded_file:
         try:
             df = pd.read_csv(uploaded_file) if uploaded_file.name.endswith(".csv") else pd.read_excel(uploaded_file)
+            # Remove duplicate columns to ensure unique merge keys.
+            df = df.loc[:, ~df.columns.duplicated()]
             st.session_state.df = df
             st.write("**Preview of Uploaded Data:**")
             st.dataframe(df.head())
@@ -271,6 +273,7 @@ def gender_bias_analysis_page():
         disease_col = st.session_state.get("disease_col", None)
         image_id_col = st.session_state.get("image_id_col", None)
         if gender_col and disease_col and image_id_col:
+            # Merge prediction results with original data using the unique image identifier.
             if "Unknown" in df_results["Gender"].values:
                 df_merged = pd.merge(df_results, df[[image_id_col, gender_col]], how="left", left_on="Image_ID", right_on=image_id_col)
                 df_merged["Gender"] = df_merged[gender_col].fillna("Unknown")
@@ -516,7 +519,7 @@ def sponsors_mentors_page():
         - Isabelle Hilali – Founder & CEO, Datacraft
         - Frédérique Richert – Strategic Designer, Thales
         - Samia Jnini – Head of Generative AI Service Line, Atos
-        - Plus additional industry experts.
+        - Others...
         """
     )
 
@@ -526,7 +529,7 @@ def feedback_page():
     feedback = st.text_area("Your Feedback", help="Enter your comments here...")
     if st.button("Submit Feedback"):
         st.success("Thank you for your feedback!")
-        # Optionally, save feedback to file or database.
+        # Optionally, save feedback to a file or database.
 
 def interactive_demos_page():
     st.title("🔍 Interactive Demonstrations")
@@ -634,56 +637,6 @@ def explainable_analysis_page():
         st.pyplot(plt)
     except Exception as e:
         st.info("WordCloud could not be generated.")
-
-def project_overview_page():
-    st.title("📈 Project Overview & Impact")
-    st.markdown(
-        """
-        **Objective:**
-
-        To explore and mitigate gender bias in AI-driven chest X‑ray analysis while promoting responsible AI.
-
-        **Impact:**
-
-        - Improve fairness in radiological predictions.
-        - Encourage ethical and safe AI development.
-        - Provide actionable strategies for bias mitigation.
-
-        **Approach:**
-
-        - Data exploration and visualization.
-        - Comparison of multiple AI models.
-        - Bias and explainable analysis.
-        """
-    )
-
-def sponsors_mentors_page():
-    st.title("🎖️ Sponsors & Mentors")
-    st.markdown(
-        """
-        **Sponsors:**
-
-        - Thales (Responsible AI Excellence Award)
-        - Datacraft
-        - emlyon business school
-
-        **Mentors:**
-
-        - Imène Brigui, PhD – WiDS Ambassador, emlyon
-        - Isabelle Hilali – Founder & CEO, Datacraft
-        - Frédérique Richert – Strategic Designer, Thales
-        - Samia Jnini – Head of Generative AI Service Line, Atos
-        - Others...
-        """
-    )
-
-def feedback_page():
-    st.title("📝 Feedback")
-    st.markdown("We value your input! Please share your thoughts and suggestions below:")
-    feedback = st.text_area("Your Feedback", help="Enter your comments here...")
-    if st.button("Submit Feedback"):
-        st.success("Thank you for your feedback!")
-        # Optionally, save feedback to a file or database.
 
 # ========== SIDEBAR NAVIGATION & THEME TOGGLE ==========
 theme_toggle = st.sidebar.checkbox("Dark Mode", value=(st.session_state.theme=="dark"), help="Toggle between dark and light themes.")
