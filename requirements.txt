@@ -4,12 +4,12 @@ torchaudio==2.2.0
 streamlit==1.29.0
 pandas==2.2.1
 numpy==1.26.4
-matplotlib==3.7.4  
+matplotlib==3.7.4
 seaborn==0.13.2
 plotly==6.0.0
 fairlearn==0.10.0
 shap==0.44.0
-scipy 
+scipy==1.10.1
 transformers==4.49.0
 lime==0.2.0.1
 fpdf==1.7.2
