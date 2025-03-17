@@ -104,8 +104,8 @@ def unify_gender_label(label):
     Otherwise returns 'Unknown'.
     """
     text = str(label).strip().lower()
-    male_keywords = ["m", "male", "man", "masculin"]
-    female_keywords = ["f", "female", "woman", "femme"]
+    male_keywords = ["m", "M","male", "man", "masculin"]
+    female_keywords = ["f", "F", "female", "woman", "femme"]
 
     if any(kw in text for kw in male_keywords):
         return "M"
@@ -119,7 +119,7 @@ def unify_disease_label(label):
     Everything else stays as-is.
     """
     text = str(label).strip().lower()
-    no_disease_keywords = ["no finding", "none", "negative", "normal", "0", "false", "no disease"]
+    no_disease_keywords = ["no finding", "No Finding", "none", "negative", "normal", "0", "false", "no disease"]
     if any(kw in text for kw in no_disease_keywords):
         return "No Disease"
     return label
