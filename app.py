@@ -100,29 +100,31 @@ except Exception as e:
 # === HELPER FUNCTIONS FOR LABELS ===
 def unify_gender_label(label):
     """
-    Converts any string containing known male/female keywords to 'M' or 'F'.
-    Otherwise returns 'Unknown'.
+    Convert synonyms to 'M', 'F', or 'Unknown'.
     """
     text = str(label).strip().lower()
-    male_keywords = ["m", "M","male", "man", "masculin"]
-    female_keywords = ["f", "F", "female", "woman", "femme"]
+    # Expand synonyms if needed:
+    male_synonyms = {"m", "male", "men", "masculino"}
+    female_synonyms = {"f", "female", "woman", "women", "femme"}
 
-    if any(kw in text for kw in male_keywords):
+    if text in male_synonyms:
         return "M"
-    if any(kw in text for kw in female_keywords):
+    elif text in female_synonyms:
         return "F"
     return "Unknown"
 
+
 def unify_disease_label(label):
     """
-    Converts strings containing 'no finding', 'none', 'negative', etc. into 'No Disease'.
-    Everything else stays as-is.
+    Convert synonyms of "no disease" into "No Disease".
+    Keep everything else as-is.
     """
     text = str(label).strip().lower()
-    no_disease_keywords = ["no finding", "No Finding", "none", "negative", "normal", "0", "false", "no disease"]
-    if any(kw in text for kw in no_disease_keywords):
+    no_disease_synonyms = {"no finding", "no findings", "none", "negative", "normal", "0", "false", "no disease"}
+    if text in no_disease_synonyms:
         return "No Disease"
     return label
+
 
 @st.cache_resource
 def preprocess_image(image):
